@@ -1,9 +1,5 @@
-data/brdf/train/*
-data/brdf/test/*
-data/svbrdf/train/*
-data/svbrdf/test/*
-data/texture/train/*
-data/texture/test/*
+data/brdf/*
+data/svbrdf/*
 hydra_logs/*
 mts_utils/*
 hydra_logs/
