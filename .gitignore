@@ -1,7 +1,9 @@
-checkpts/
-data/brdf/*
-data/svbrdf/*
-data/texture/*
+data/brdf/train/*
+data/brdf/test/*
+data/svbrdf/train/*
+data/svbrdf/test/*
+data/texture/train/*
+data/texture/test/*
 hydra_logs/*
 mts_utils/*
 hydra_logs/
