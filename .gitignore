@@ -1,0 +1,8 @@
+checkpts/
+data/brdf/*
+data/svbrdf/*
+data/texture/*
+hydra_logs/*
+mts_utils/*
+hydra_logs/
+info.txt

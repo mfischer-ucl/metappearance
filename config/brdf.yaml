@@ -1,0 +1,40 @@
+data:
+  trainpath: data/brdf/train
+  testpath: data/brdf/test
+  xvars: ['hx', 'hy', 'hz', 'dx', 'dy', 'dz']
+  yvars: ['brdf_r', 'brdf_g', 'brdf_b']
+  use_only_first_n: 3        # for debug, when =-1, load all      # WARN -- reset to -1
+
+model:
+  dummy: None     # nothing to do here, but needed for compatibility
+
+train:
+  bs: 512
+  epochs: 1000001
+  eval_every_n: 10
+  logLoss_every_n: 10       # to avoid blown-up logfiles
+  full_final: False
+
+meta:
+  algorithm: 'maml'         # or fomaml
+
+  # innerloop steps and meta batchsize
+  num_inner_steps: 10
+  num_inner_tasks: 1
+
+  # inner-optim parameters
+  inner_optim: 'meta_sgd'           # sgd or meta_sgd
+  inner_lr: 0.01
+  init_metasgd: 0.001               # init for meta-sgd per-parameter learning rate
+
+  # meta-optim parameters
+  outer_optim: 'adam'
+  outer_lr: 1e-4
+  minimum_lr: 1e-9
+  weight_decay: 1e-6
+
+  # loading checkpt:
+  load_checkpt: False
+  checkpt_path: 'checkpts/brdf.pt'
+
+

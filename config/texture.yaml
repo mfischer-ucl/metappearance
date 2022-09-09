@@ -1,0 +1,40 @@
+data:
+  id: -1
+  size: [192, 256]
+  trainpath: 'data/texture/train'
+  testpath: 'data/texture/test'
+  use_only_first_n: -1        # for debug, when =-1, load all
+
+model:
+  mapping_layers: 0
+  layers: 4
+  w: 32
+  z: 64
+
+train:
+  bs: 1
+  epochs: 1000001
+  eval_every_n: 500
+  logLoss_every_n: 10
+
+meta:
+  algorithm: 'fomaml'
+
+  # innerloop steps and meta batchsize
+  num_inner_steps: 15
+  num_inner_tasks: 5
+
+  # inner-optim parameters
+  inner_optim: 'meta_sgd'           # sgd or meta_sgd
+  inner_lr: 0.01
+  init_metasgd: 0.001               # init for meta-sgd per-parameter learning rate
+
+  # optim parameters
+  outer_optim: 'adam'
+  outer_lr: 1e-4
+  minimum_lr: 1e-9
+  weight_decay: 1e-6
+
+  # loading checkpt:
+  load_checkpt: True
+  checkpt_path: 'checkpts/texture.pt'

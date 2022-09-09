@@ -1,0 +1,9 @@
+torchmeta==1.7.0
+hydra-core==1.1.0
+matplotlib==3.5.3
+pandas==1.4.4
+pytorch_lightning==1.4.4
+kornia==0.4.1
+opencv-python==4.5.5.62
+torchinfo==1.6.5
+torchmetrics==0.6.0

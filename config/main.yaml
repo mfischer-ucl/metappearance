@@ -1,0 +1,23 @@
+hydra:
+  run:
+    dir: ../hydra_logs/${hydra.job.name}/${hydra.job.id}
+  sweep:
+    dir: ../hydra_logs/${hydra.job.name}/
+    subdir: ${version}
+  job:
+    name: ${name}
+    id: ${version}
+name: Metappearance
+version: ${general.mode}
+device: 'cuda'
+n_workers: 10
+n_gpus: 1
+dim: -1
+
+general:
+  # set your basepath here
+  basepath: '/home/michael/research/metappearance'
+
+  # metappearance modes: texture, brdf, svbrdf, svbrdfnonstat, illumination, transport
+  mode: 'texture'
+
