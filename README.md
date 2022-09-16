@@ -150,5 +150,4 @@ If you find our work useful or plan to (re-) use parts of it in your own project
   volume={41},
   number={4}
 }
-
 ```
