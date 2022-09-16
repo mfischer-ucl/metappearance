@@ -3,7 +3,7 @@ data:
   testpath: data/brdf/test
   xvars: ['hx', 'hy', 'hz', 'dx', 'dy', 'dz']
   yvars: ['brdf_r', 'brdf_g', 'brdf_b']
-  use_only_first_n: 3        # for debug, when =-1, load all      # WARN -- reset to -1
+  use_only_first_n: -1
 
 model:
   dummy: None     # nothing to do here, but needed for compatibility
@@ -11,8 +11,9 @@ model:
 train:
   bs: 512
   epochs: 1000001
+  eval_only_n: -1           # when =-1, use all
   eval_every_n: 10
-  logLoss_every_n: 10       # to avoid blown-up logfiles
+  logLoss_every_n: 50       # to avoid blown-up logfiles
   full_final: False
 
 meta:

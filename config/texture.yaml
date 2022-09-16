@@ -3,7 +3,7 @@ data:
   size: [192, 256]
   trainpath: 'data/texture/train'
   testpath: 'data/texture/test'
-  use_only_first_n: -1        # for debug, when =-1, load all
+  use_only_first_n: -1        # when =-1, load all
 
 model:
   mapping_layers: 0
@@ -14,7 +14,9 @@ model:
 train:
   bs: 1
   epochs: 1000001
+  eval_only_n: -1             # when =-1, use all
   eval_every_n: 500
+  full_final: False
   logLoss_every_n: 10
 
 meta:
@@ -36,5 +38,5 @@ meta:
   weight_decay: 1e-6
 
   # loading checkpt:
-  load_checkpt: True
+  load_checkpt: False
   checkpt_path: 'checkpts/texture.pt'

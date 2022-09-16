@@ -30,13 +30,13 @@ class BRDFDataset(MetaDataset):
                     break
             if not merlfile.endswith('binary'): continue
 
-            merlTask = BRDFTask(path=os.path.join(self.path, merlfile),
-                                batchsize=self.cfg.train.bs,
-                                id=merlfile.replace('.binary', ''),
-                                device=self.cfg.device)
+            task = BRDFTask(path=os.path.join(self.path, merlfile),
+                            batchsize=self.cfg.train.bs,
+                            id=merlfile.replace('.binary', ''),
+                            device=self.cfg.device)
 
-            self.tasks.append(merlTask)
-            print("Read and loaded {}".format(merlfile))
+            self.tasks.append(task)
+            # print("Read and loaded {}".format(merlfile))
 
 
 class BRDFTask(MetaTask):

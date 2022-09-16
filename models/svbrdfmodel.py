@@ -54,9 +54,9 @@ class Model(MetaModule, MetaModel):
             self.rot_encoder.requires_grad_(False)
             self.encoder.requires_grad_(False)
 
-        self.renderer = Renderer(cfg.model.renderer.fov,
-                                 cfg.model.renderer.gamma,
-                                 cfg.model.renderer.attenuation).to(cfg.device)
+        self.renderer = Renderer(fov=cfg.model.renderer.fov,
+                                 gamma=cfg.model.renderer.gamma,
+                                 attenuation=cfg.model.renderer.attenuation, device=cfg.device).to(cfg.device)
         self.render_position = self.renderer.get_position(cfg.data.size).to(cfg.device)
         self.decoder = Decoder(cfg, num_final_channels=6).to(cfg.device)
 

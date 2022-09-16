@@ -35,17 +35,19 @@ def resolve_model(mode, appl_subdict, verbose):
     model = Model(appl_subdict)
     if verbose:
         from torchinfo import summary
+        print("Model Summary:")
         summary(model)
+        print("\n")
     return model
 
 
 def resolve_loss(mode, appl_subdict):
     if mode == 'texture':
-        return losses.TextureLoss()
+        return losses.TextureLoss(device=appl_subdict.device)
     if mode == 'brdf':
         return losses.BRDFLoss()
     if mode == 'svbrdf':
-        return losses.SVBRDFLoss(appl_subdict)
+        return losses.SVBRDFLoss(appl_subdict, device=appl_subdict.device)
 
 
 def zero_gradients(params):

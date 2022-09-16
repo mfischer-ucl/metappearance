@@ -6,12 +6,13 @@ import torch.nn.functional as F
 
 
 class Renderer(nn.Module):
-    def __init__(self, fov, gamma, attenuation, type='ggx'):
+    def __init__(self, fov, gamma, attenuation, type='ggx', device='cuda'):
         super(Renderer, self).__init__()
 
         self.type = type
         self.fov = fov
         self.gamma = gamma
+        self.device = device
         self.attenuation = attenuation
 
     def shading(self, diffuse, specular, roughness, normal, light_dir, view_dir):
@@ -112,7 +113,7 @@ class Renderer(nn.Module):
 
         height, width = size
         aspect_ratio = width / height
-        position = kornia.utils.create_meshgrid(height, width).permute(0, 3, 1, 2).to('cuda')
+        position = kornia.utils.create_meshgrid(height, width).permute(0, 3, 1, 2).to(self.device)
         position[:, 1] /= aspect_ratio
         position[:, 1] *= -1            # flip y axis as kornia uses different
 

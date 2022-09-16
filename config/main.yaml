@@ -16,8 +16,8 @@ dim: -1
 
 general:
   # set your basepath here
-  basepath: '/home/michael/research/metappearance'
+  basepath: '<metappearance source path here>'
 
-  # metappearance modes: texture, brdf, svbrdf, svbrdfnonstat, illumination, transport
+  # metappearance modes: texture, brdf, svbrdf
   mode: 'texture'
 

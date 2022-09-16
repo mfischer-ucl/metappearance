@@ -5,7 +5,6 @@ import time
 import torch
 import torch.nn as nn
 import torchvision.io
-import matplotlib.pyplot as plt
 
 from utils.utils import zero_gradients
 from torch.utils.tensorboard import SummaryWriter
@@ -46,16 +45,18 @@ class Metappearance(nn.Module):
     ############################################################
 
     def init_bookkeeping(self):
-        if not os.path.exists(self.log_savedir): os.mkdir(self.log_savedir)
-        if not os.path.exists(self.output_savedir): os.mkdir(self.output_savedir)
-        if not os.path.exists(self.checkpt_savedir): os.mkdir(self.checkpt_savedir)
-        if not os.path.exists(self.converged_savedir): os.mkdir(self.converged_savedir)
+        if not os.path.exists(self.log_savedir): os.makedirs(self.log_savedir, exist_ok=True)
+        if not os.path.exists(self.output_savedir): os.makedirs(self.output_savedir, exist_ok=True)
+        if not os.path.exists(self.checkpt_savedir): os.makedirs(self.checkpt_savedir, exist_ok=True)
+        if not os.path.exists(self.converged_savedir): os.makedirs(self.converged_savedir, exist_ok=True)
         self.writer = SummaryWriter(log_dir=self.log_savedir)
 
     def init_metaSGD(self):
         # meta-sgd: for each model parameter, add a learning rate
         for key, val in self.model.named_parameters():
-            self.param_lr[key] = torch.nn.Parameter(self.cfg.meta.init_metasgd * torch.ones_like(val, requires_grad=True))
+            self.param_lr[key] = torch.nn.Parameter(self.cfg.meta.init_metasgd * torch.ones_like(val,
+                                                                                                 requires_grad=True,
+                                                                                                 device=self.device))
 
     def init_optimizers(self):
         # inner-loop optim:
@@ -103,7 +104,7 @@ class Metappearance(nn.Module):
         print("Loaded model weights from {}".format(self.checkpt_path))
 
     def load_checkpt(self, checkpt_path):
-        checkpt = torch.load(checkpt_path)
+        checkpt = torch.load(checkpt_path, map_location=self.device)
         self.load_weights(checkpt)
         self.load_inneroptim(checkpt)
 
@@ -202,10 +203,17 @@ class Metappearance(nn.Module):
             if (epoch + 1) % self.cfg.train.eval_every_n == 0:
 
                 with torch.no_grad():
-                    train_tasks = [self.trainDistr[k] for k in range(len(self.trainDistr))]
+
+                    # trainDistr might be very large, calc trainloss on subset only?
+                    # this affects only logging, not the training/gradients themselves
+                    if self.cfg.train.eval_only_n != -1:
+                        train_tasks = [self.trainDistr.sample_task() for _ in range(self.cfg.train.eval_only_n)]
+                    else:
+                        train_tasks = [self.trainDistr.sample_task(k) for k in range(len(self.trainDistr))]
                     train_loss, _ = self.evaluate_model(tasks=train_tasks, epoch=epoch + 1,
                                                         full_final=self.cfg.train.full_final, save_converged=False)
 
+                    # use all tasks for test
                     test_tasks = [self.testDistr[k] for k in range(len(self.testDistr))]
                     test_loss, _ = self.evaluate_model(tasks=test_tasks, epoch=epoch + 1,
                                                        full_final=self.cfg.train.full_final, save_converged=False)
@@ -265,19 +273,10 @@ class Metappearance(nn.Module):
             results[task.id] = final_loss.detach().cpu().item()
             results[task.id + '_output'] = final_output.detach().cpu().numpy()
 
-            fig, ax = plt.subplots(1, 2)
-            ax[0].imshow(final_output.detach().cpu().squeeze().permute(1, 2, 0))
-            ax[0].set_title('Final')
-            ax[1].imshow(gt.detach().squeeze().cpu().permute(1, 2, 0))
-            ax[1].set_title('GT')
-            [a.axis('off') for a in ax]
-            plt.title('Task {} - {}'.format(task.id, final_loss.item()))
-            plt.show()
-
             if save_converged is True:
                 # make one folder per task:
                 path_for_task = os.path.join(self.converged_savedir, task.id)
-                if not os.path.exists(path_for_task): os.mkdir(path_for_task)
+                if not os.path.exists(path_for_task): os.makedirs(path_for_task, exist_ok=True)
                 self.save_model(filepath=os.path.join(path_for_task, 'model.pt'), params=final_params, epoch=epoch)
                 print("Saved converged models to {}".format(path_for_task))
 
@@ -289,7 +288,6 @@ class Metappearance(nn.Module):
                                           os.path.join(self.output_savedir, task.id+'.png'))
                 print("Saved output to {}".format(self.output_savedir))
 
-        assert len([results[x] for x in results.keys() if not 'output' in x]) == len(tasks)
         avg_loss = sum([results[x] for x in results.keys() if not 'output' in x]) / len(tasks)
         return avg_loss, results
 

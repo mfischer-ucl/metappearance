@@ -4,7 +4,7 @@ data:
   shuffle_c: False
   trainpath: 'data/svbrdf/train'
   testpath: 'data/svbrdf/test'
-  use_only_first_n: -1        # for debug, when =-1, load all
+  use_only_first_n: -1    # when =-1, load all
   use_pretrained_encoder: False
   pretrained_encoder_dir: 'checkpts/'
 
@@ -26,7 +26,9 @@ model:
 train:
   bs: 1
   epochs: 1000001
-  eval_every_n: 500
+  eval_only_n: 100        # when =-1, use all
+  eval_every_n: 100
+  full_final: False
   logLoss_every_n: 10
   use_augmentation: True
 

@@ -31,6 +31,10 @@ def main(cfg: DictConfig) -> None:
                                          basepath=cfg.general.basepath,
                                          appl_subdict=subdict)
 
+    print("Mode: {}".format(cfg.general.mode))
+    print("Num. of train tasks:", len(trainDistr))
+    print("Num. of test tasks:", len(testDistr))
+
     # construct inner-loop model
     model = resolve_model(mode=cfg.general.mode,
                           appl_subdict=subdict,
