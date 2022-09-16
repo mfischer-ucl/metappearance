@@ -1,5 +1,6 @@
 data/brdf/*
 data/svbrdf/*
+data/svbrdf/metadata.json
 hydra_logs/*
 mts_utils/*
 hydra_logs/
