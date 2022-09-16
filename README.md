@@ -30,7 +30,7 @@ Tested with Python 3.8, PyTorch 1.8.1 and CUDA 11.1 on Ubuntu 20.04.4 x64 and an
 ___
 ### Usage 
 
-First, change the `basepath` in `main.yaml` to where you saved this repository. 
+First, change the `basepath` in `config/main.yaml` to where you saved this repository. 
 
 #### Data 
 To use this codebase, you will then need to download the respective data. 
