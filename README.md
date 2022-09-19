@@ -56,7 +56,7 @@ To train with the provided modes, run `meta_train.py` with the respective mode s
 ```
 python src/meta_train.py general.mode='texture'
 ```
-Hydra will log the current experiment config, tensorboard-output and checkpoints in `hydra_logs/Metappearance/<mode>`, e.g.:
+Hydra will log the current experiment config, tensorboard-output and checkpoints in `hydra_logs/Metappearance/<mode>`.
 
 
 #### Inference 
